@@ -5,13 +5,14 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 
 const app = express();
+const path = require("path");
 const PORT = process.env.PORT || 5000;
 
 // Middleware
+app.use(express.static(path.join(__dirname, "public"))); // First
 app.use(cors());
-//app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static("public"));
+app.use(express.json()); // Uncomment if you need JSON parsing
 
 // MySQL Connection
 const db = mysql.createConnection({
@@ -30,6 +31,11 @@ db.connect((err) => {
 });
 
 // Routes
+
+app.get("/favicon.ico", (req, res) => {
+  res.status(204).end(); // No-content response
+});
+
 app.get("/", (req, res) => res.send("Welcome to Express Server!"));
 
 app.get("/users", (req, res) => {
@@ -40,13 +46,13 @@ app.get("/users", (req, res) => {
 });
 
 app.post("/users", (req, res) => {
-  const { name, email } = req.body;
+  const { name, email, password } = req.body;
   db.query(
-    "INSERT INTO users (name, email) VALUES (?, ?)",
-    [name, email],
+    "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
+    [name, email, password],
     (err, result) => {
       if (err) res.status(500).json({ error: err.message });
-      else res.json({ id: result.insertId, name, email });
+      else res.json({ id: result.insertId, name, email, password });
     }
   );
 });
