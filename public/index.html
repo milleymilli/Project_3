@@ -3,18 +3,65 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="styleshhet" href="./stylesheets/style.css"
-    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+    <title>User Management</title>
   </head>
   <body>
-    <h1>User List</h1>
-    <ul id="user-list"></ul>
+    <div class="user-section">
+      <!-- USER LISTS STRUCTURE -->
+      <h1>User List</h1>
 
-    <h2>Add User</h2>
-    <input type="text" id="name" placeholder="Name" />
-    <input type="email" id="email" placeholder="Email" />
-    <button onclick="addUser()">Add</button>
+      <ul id="user-list"></ul>
+      <h2>Add User</h2>
+      <form id="user-form" onsubmit="addUser(); return false;">
+        <input type="text" id="name" placeholder="Name" required />
+        <input type="email" id="email" placeholder="Email" required />
+        <input
+          type="password"
+          id="password"
+          placeholder="Password"
+          required
+          minlength="8"
+        />
+        <button type="submit">Add User</button>
+      </form>
+    </div>
 
-    <script src="./javascripts/script.js"></script>
+    <div class="recipe-section">
+      <h1>Recipe List</h1>
+      <div class="search-container">
+        <input
+          type="text"
+          id="recipeSearch"
+          placeholder="Search by name or type..."
+        />
+      </div>
+      <div
+        id="noRecipes"
+        style="display: none; text-align: center; padding: 20px"
+      >
+        <p>Oops! No recipes found</p>
+        <button onclick="clearSearch()">Clear Search</button>
+      </div>
+      <!-- RECIPE STRUCTURE -->
+
+      <div id="recipes-container" class="recipe-grid"></div>
+    </div>
+
+    <!-- MODAL STRUCTURE -->
+    <div id="recipeModal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2 id="modalRecipeName"></h2>
+        <h3>Author: <span id="modalRecipeAuthor"></span></h3>
+
+        <h3>Ingredients</h3>
+        <ul id="modalRecipeIngredients"></ul>
+
+        <h3>Instructions</h3>
+        <ol id="modalRecipeInstructions"></ol>
+      </div>
+    </div>
+    <script src="./script.js"></script>
   </body>
 </html>
