@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recipe App | Welcome</title>
+    <link rel="stylesheet" href="./css/login.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav id="main-nav">
+      <div class="nav-container">
+        <a href="#hero" class="logo" data-scroll>RecipeApp</a>
+        <div class="nav-links">
+          <a class="nav-link" id="nav-login" href="#auth-section" data-scroll
+            >Login</a
+          >
+          <a class="nav-link" id="nav-register" href="#auth-section" data-scroll
+            >Register</a
+          >
+        </div>
+      </div>
+    </nav>
+    <!-- Hero Section -->
+    <div class="hero" id="hero">
+      <div class="hero-content">
+        <div class="recipe-section">
+          <h1>Recipe List</h1>
+          <div class="search-container">
+            <input
+              type="text"
+              id="recipeSearch"
+              placeholder="Search by name or type..."
+            />
+          </div>
+          <div
+            id="noRecipes"
+            style="display: none; text-align: center; padding: 20px"
+          >
+            <p>Oops! No recipes found</p>
+            <button onclick="clearSearch()">Clear Search</button>
+          </div>
+          <!-- RECIPE STRUCTURE -->
+
+          <div id="recipes-container" class="recipe-grid"></div>
+        </div>
+      </div>
+    </div>
+    <!-- Auth Forms Container -->
+    <div class="auth-forms-wrapper" id="auth-section">
+      <div class="container">
+        <div class="form-container" id="login-container">
+          <form class="form" id="login-form">
+            <h2>Welcome Back</h2>
+            <div class="input-group">
+              <input type="email" id="login-email" required />
+              <label for="login-email">Email</label>
+            </div>
+            <div class="input-group">
+              <input type="password" id="login-password" required />
+              <label for="login-password">Password</label>
+            </div>
+            <button type="submit">Login</button>
+          </form>
+          <div class="toggle-container">
+            <button class="toggle-btn" id="show-register">
+              New here? Register
+            </button>
+          </div>
+        </div>
+
+        <div class="form-container hidden" id="register-container">
+          <form class="form" id="register-form">
+            <h2>Create Account</h2>
+            <div class="input-group">
+              <input type="text" id="register-name" required />
+              <label for="register-name">Full Name</label>
+            </div>
+            <div class="input-group">
+              <input type="email" id="register-email" required />
+              <label for="register-email">Email</label>
+            </div>
+            <div class="input-group">
+              <input type="password" id="register-password" required />
+              <label for="register-password">Password</label>
+            </div>
+            <div class="input-group">
+              <input type="password" id="register-confirm" required />
+              <label for="register-confirm">Confirm Password</label>
+            </div>
+            <button type="submit">Register</button>
+          </form>
+          <div class="toggle-container">
+            <button class="toggle-btn" id="show-login">
+              Already have an account? Login
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- MODAL STRUCTURE -->
+    <div id="recipeModal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2 id="modalRecipeName"></h2>
+        <h3>Author: <span id="modalRecipeAuthor"></span></h3>
+
+        <h3>Ingredients</h3>
+        <ul id="modalRecipeIngredients"></ul>
+
+        <h3>Instructions</h3>
+        <ol id="modalRecipeInstructions"></ol>
+      </div>
+    </div>
+    <script src="./js/login.js"></script>
+  </body>
+</html>

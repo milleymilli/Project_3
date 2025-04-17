@@ -3,10 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="./css/style.css" />
     <title>User Management</title>
   </head>
   <body>
+    <!-- Navigation -->
+    <nav id="main-nav">
+      <div class="nav-container">
+        <div class="mobile-menu-icon" id="mobile-menu">☰</div>
+        <a href="#user-list" class="logo" data-scroll>RecipeApp</a>
+        <div class="nav-links">
+          <a class="nav-link" id="logout-link" href="#auth-section" data-scroll
+            >Logout</a
+          >
+        </div>
+      </div>
+    </nav>
     <div class="user-section">
       <!-- USER LISTS STRUCTURE -->
       <h1>User List</h1>
@@ -47,7 +59,73 @@
 
       <div id="recipes-container" class="recipe-grid"></div>
     </div>
+    <div class="add-recipe-container">
+      <h2>Add New Recipe</h2>
+      <form id="add-recipe-form">
+        <!-- Recipe Name -->
+        <div class="form-group">
+          <label for="recipe-name">Recipe Name*</label>
+          <input type="text" id="recipe-name" required maxlength="50" />
+        </div>
 
+        <!-- Description -->
+        <div class="form-group">
+          <label for="recipe-description">Description*</label>
+          <textarea
+            id="recipe-description"
+            rows="3"
+            required
+            maxlength="300"
+          ></textarea>
+        </div>
+
+        <!-- Recipe Type -->
+        <div class="form-group">
+          <label for="recipe-type">Cuisine Type*</label>
+          <select id="recipe-type" required>
+            <option value="">Select a cuisine type</option>
+            <option value="French">French</option>
+            <option value="Italian">Italian</option>
+            <option value="Chinese">Chinese</option>
+            <option value="Indian">Indian</option>
+            <option value="Mexican">Mexican</option>
+            <option value="Others">Others</option>
+          </select>
+        </div>
+
+        <!-- Cooking Time -->
+        <div class="form-group">
+          <label for="cooking-time">Cooking Time (minutes)*</label>
+          <input type="number" id="cooking-time" required min="1" />
+        </div>
+
+        <!-- Ingredients -->
+        <div class="form-group">
+          <label for="recipe-ingredients">Ingredients* (one per line)</label>
+          <textarea id="recipe-ingredients" rows="5" required></textarea>
+          <small>Enter each ingredient on a new line</small>
+        </div>
+
+        <!-- Instructions -->
+        <div class="form-group">
+          <label for="recipe-instructions">Instructions* (step by step)</label>
+          <textarea id="recipe-instructions" rows="8" required></textarea>
+          <small>Enter each instruction step on a new line</small>
+        </div>
+
+        <!-- Image URL -->
+        <div class="form-group">
+          <label for="recipe-image">Image URL</label>
+          <input
+            type="url"
+            id="recipe-image"
+            placeholder="https://example.com/image.jpg"
+          />
+        </div>
+
+        <button type="submit" class="submit-btn">Add Recipe</button>
+      </form>
+    </div>
     <!-- MODAL STRUCTURE -->
     <div id="recipeModal" class="modal">
       <div class="modal-content">
@@ -62,6 +140,6 @@
         <ol id="modalRecipeInstructions"></ol>
       </div>
     </div>
-    <script src="./script.js"></script>
+    <script src="./js/index.js"></script>
   </body>
 </html>

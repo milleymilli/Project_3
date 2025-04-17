@@ -1,6 +1,45 @@
+const mobileMenu = document.getElementById("mobile-menu");
+const navLinks = document.querySelector(".nav-links");
+
+mobileMenu.addEventListener("click", () => {
+  navLinks.classList.toggle("show");
+});
+
+document.getElementById("logout-link").addEventListener("click", async (e) => {
+  e.preventDefault();
+
+  try {
+    // 1. Invalidate token on server
+    await fetch("/api/logout", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token", "user")}`,
+      },
+    });
+
+    // 2. Nuclear client-side cleanup
+    localStorage.clear();
+    sessionStorage.clear();
+
+    // 3. Redirect with cache busting and history wipe
+    window.location.replace(`/login.html?nocache=${Date.now()}`);
+
+    // 4. Service worker cleanup (if applicable)
+    if ("caches" in window) {
+      caches.keys().then((keys) => keys.forEach((key) => caches.delete(key)));
+    }
+  } catch (err) {
+    console.error("Logout error:", err);
+    // Fallback cleanup
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    window.location.href = "/login.html";
+  }
+});
+
 //DISPLAYING ALL OUR USERS
 async function fetchUsers() {
-  let response = await fetch("/users");
+  let response = await fetch("/api/users");
   let users = await response.json(); //Why are we using JSON HERE when  we are already using it in the backend????
   document.getElementById("user-list").innerHTML = users
     .map((user) => `<li>${user.name} (${user.email})</li>`)
@@ -24,7 +63,7 @@ async function addUser() {
 
     console.log("Submitting:", { name, email, password });
 
-    const response = await fetch("/users", {
+    const response = await fetch("/api/users", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, email, password }),
@@ -48,7 +87,7 @@ async function addUser() {
 //FETCHING ALL OUR RECIPES AND CREATTING RECIPE CARD FOR EACH AND ONE OF THEM
 async function fetchRecipes() {
   try {
-    let respo = await fetch("/recipes"); // Calls Recipes Express API
+    let respo = await fetch("/api/recipes"); // Calls Recipes Express API
     let recipes = await respo.json();
     const container = document.getElementById("recipes-container");
     // container.innerHTML = "";
@@ -72,6 +111,73 @@ function createRecipeCard(recipe) {
   return card;
 }
 
+//CREATING NEW RECIPE
+document
+  .getElementById("add-recipe-form")
+  .addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const form = e.target;
+    const submitBtn = form.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Adding Recipe...";
+
+    try {
+      const recipeData = {
+        name: document.getElementById("recipe-name").value.trim(),
+        description: document.getElementById("recipe-description").value.trim(),
+        type: document.getElementById("recipe-type").value,
+        Cookingtime: parseInt(document.getElementById("cooking-time").value),
+        ingredients: document
+          .getElementById("recipe-ingredients")
+          .value.split("\n")
+          .filter((line) => line.trim() !== "")
+          .join(", "),
+        instructions: document
+          .getElementById("recipe-instructions")
+          .value.split("\n")
+          .filter((line) => line.trim() !== "")
+          .join(", "),
+        image: document.getElementById("recipe-image").value.trim() || null,
+      };
+
+      // Validate required fields
+      if (
+        !recipeData.name ||
+        !recipeData.description ||
+        !recipeData.type ||
+        !recipeData.Cookingtime ||
+        !recipeData.ingredients ||
+        !recipeData.instructions
+      ) {
+        throw new Error("All required fields must be filled");
+      }
+
+      const response = await fetch("/api/recipe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(recipeData),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to add recipe");
+      }
+
+      alert("Recipe added successfully!");
+      form.reset();
+      fetchRecipes(); // Refresh the recipe list
+    } catch (error) {
+      console.error("Error:", error);
+      alert(`Error: ${error.message}`);
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Add Recipe";
+    }
+  });
 //CREATING A MODAL DISPALYING THE RECIPE DETAILS
 async function viewRecipe(rid) {
   const modal = document.getElementById("recipeModal");
@@ -82,7 +188,7 @@ async function viewRecipe(rid) {
   };
   //console.log("Clicked - Recipe ID:", rid);
   try {
-    let response = await fetch(`/recipe/${rid}`);
+    let response = await fetch(`/api/recipes/${rid}`);
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(
