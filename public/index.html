@@ -7,137 +7,137 @@
     <title>User Management</title>
   </head>
   <body>
-    <!-- Navigation -->
     <nav id="main-nav">
       <div class="nav-container">
         <div class="mobile-menu-icon" id="mobile-menu">☰</div>
         <a href="#user-list" class="logo" data-scroll>RecipeApp</a>
         <div class="nav-links">
+          <a class="nav-link" href="#" onclick="showSection('user-section')"
+            >Users</a
+          >
+          <a class="nav-link" href="#" onclick="showSection('add-user')"
+            >Add-User</a
+          >
+          <a class="nav-link" href="#" onclick="showSection('recipe-section')"
+            >Recipes</a
+          >
+          <a
+            class="nav-link"
+            href="#"
+            onclick="showSection('add-recipe-container')"
+            >Add-Recipe</a
+          >
           <a class="nav-link" id="logout-link" href="#auth-section" data-scroll
             >Logout</a
           >
         </div>
       </div>
     </nav>
-    <div class="user-section">
-      <!-- USER LISTS STRUCTURE -->
-      <h1>User List</h1>
 
-      <ul id="user-list"></ul>
-      <h2>Add User</h2>
-      <form id="user-form" onsubmit="addUser(); return false;">
-        <input type="text" id="name" placeholder="Name" required />
-        <input type="email" id="email" placeholder="Email" required />
-        <input
-          type="password"
-          id="password"
-          placeholder="Password"
-          required
-          minlength="8"
-        />
-        <button type="submit">Add User</button>
-      </form>
-    </div>
-
-    <div class="recipe-section">
-      <h1>Recipe List</h1>
-      <div class="search-container">
-        <input
-          type="text"
-          id="recipeSearch"
-          placeholder="Search by name or type..."
-        />
+    <div class="container">
+      <div class="user-section">
+        <h1>List Of All Registered Users</h1>
+        <ul id="user-list"></ul>
       </div>
-      <div
-        id="noRecipes"
-        style="display: none; text-align: center; padding: 20px"
-      >
-        <p>Oops! No recipes found</p>
-        <button onclick="clearSearch()">Clear Search</button>
-      </div>
-      <!-- RECIPE STRUCTURE -->
 
-      <div id="recipes-container" class="recipe-grid"></div>
-    </div>
-    <div class="add-recipe-container">
-      <h2>Add New Recipe</h2>
-      <form id="add-recipe-form">
-        <!-- Recipe Name -->
-        <div class="form-group">
-          <label for="recipe-name">Recipe Name*</label>
-          <input type="text" id="recipe-name" required maxlength="50" />
-        </div>
-
-        <!-- Description -->
-        <div class="form-group">
-          <label for="recipe-description">Description*</label>
-          <textarea
-            id="recipe-description"
-            rows="3"
-            required
-            maxlength="300"
-          ></textarea>
-        </div>
-
-        <!-- Recipe Type -->
-        <div class="form-group">
-          <label for="recipe-type">Cuisine Type*</label>
-          <select id="recipe-type" required>
-            <option value="">Select a cuisine type</option>
-            <option value="French">French</option>
-            <option value="Italian">Italian</option>
-            <option value="Chinese">Chinese</option>
-            <option value="Indian">Indian</option>
-            <option value="Mexican">Mexican</option>
-            <option value="Others">Others</option>
-          </select>
-        </div>
-
-        <!-- Cooking Time -->
-        <div class="form-group">
-          <label for="cooking-time">Cooking Time (minutes)*</label>
-          <input type="number" id="cooking-time" required min="1" />
-        </div>
-
-        <!-- Ingredients -->
-        <div class="form-group">
-          <label for="recipe-ingredients">Ingredients* (one per line)</label>
-          <textarea id="recipe-ingredients" rows="5" required></textarea>
-          <small>Enter each ingredient on a new line</small>
-        </div>
-
-        <!-- Instructions -->
-        <div class="form-group">
-          <label for="recipe-instructions">Instructions* (step by step)</label>
-          <textarea id="recipe-instructions" rows="8" required></textarea>
-          <small>Enter each instruction step on a new line</small>
-        </div>
-
-        <!-- Image URL -->
-        <div class="form-group">
-          <label for="recipe-image">Image URL</label>
+      <div class="add-user">
+        <h2>Add User</h2>
+        <form id="user-form" onsubmit="addUser(); return false;">
+          <input type="text" id="name" placeholder="Name" required />
+          <input type="email" id="email" placeholder="Email" required />
           <input
-            type="url"
-            id="recipe-image"
-            placeholder="https://example.com/image.jpg"
+            type="password"
+            id="password"
+            placeholder="Password"
+            required
+            minlength="8"
+          />
+          <button type="submit">Add User</button>
+        </form>
+      </div>
+
+      <div class="recipe-section">
+        <h1>Recipe List</h1>
+        <div class="search-container">
+          <input
+            type="text"
+            id="recipeSearch"
+            placeholder="Search by name or type..."
           />
         </div>
+        <div id="noRecipes" style="display: none">
+          <p>Oops! No recipes found</p>
+          <button onclick="clearSearch()">Clear Search</button>
+        </div>
+        <div id="recipes-container" class="recipe-grid"></div>
+      </div>
 
-        <button type="submit" class="submit-btn">Add Recipe</button>
-      </form>
-    </div>
-    <!-- MODAL STRUCTURE -->
-    <div id="recipeModal" class="modal">
-      <div class="modal-content">
-        <span class="close-modal">&times;</span>
-        <h2 id="modalRecipeName"></h2>
-        <h3>Author: <span id="modalRecipeAuthor"></span></h3>
+      <div class="add-recipe-container">
+        <h2>Add New Recipe</h2>
+        <form id="add-recipe-form">
+          <div class="form-group">
+            <label for="recipe-name">Recipe Name*</label>
+            <input type="text" id="recipe-name" required maxlength="50" />
+          </div>
+          <div class="form-group">
+            <label for="recipe-description">Description*</label>
+            <textarea
+              id="recipe-description"
+              rows="3"
+              required
+              maxlength="300"
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label for="recipe-type">Cuisine Type*</label>
+            <select id="recipe-type" required>
+              <option value="">Select a cuisine type</option>
+              <option value="French">French</option>
+              <option value="Italian">Italian</option>
+              <option value="Chinese">Chinese</option>
+              <option value="Indian">Indian</option>
+              <option value="Mexican">Mexican</option>
+              <option value="Others">Others</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="cooking-time">Cooking Time (minutes)*</label>
+            <input type="number" id="cooking-time" required min="1" />
+          </div>
+          <div class="form-group">
+            <label for="recipe-ingredients">Ingredients* (one per line)</label>
+            <textarea id="recipe-ingredients" rows="5" required></textarea>
+            <small>Enter each ingredient on a new line</small>
+          </div>
+          <div class="form-group">
+            <label for="recipe-instructions"
+              >Instructions* (step by step)</label
+            >
+            <textarea id="recipe-instructions" rows="8" required></textarea>
+            <small>Enter each instruction step on a new line</small>
+          </div>
+          <div class="form-group">
+            <label for="recipe-image">Image URL</label>
+            <input
+              type="url"
+              id="recipe-image"
+              placeholder="https://example.com/image.jpg"
+            />
+          </div>
+          <button type="submit" class="submit-btn">Add Recipe</button>
+        </form>
+      </div>
 
-        <h3>Ingredients</h3>
-        <ul id="modalRecipeIngredients"></ul>
-
-        <h3>Instructions</h3>
-        <ol id="modalRecipeInstructions"></ol>
+      <div id="recipeModal" class="modal">
+        <div class="modal-content">
+          <span class="close-modal">&times;</span>
+          <h2 id="modalRecipeName"></h2>
+          <h3>Author: <span id="modalRecipeAuthor"></span></h3>
+          <h3>Ingredients</h3>
+          <ul id="modalRecipeIngredients"></ul>
+          <h3>Instructions</h3>
+          <ol id="modalRecipeInstructions"></ol>
+        </div>
       </div>
     </div>
     <script src="./js/index.js"></script>

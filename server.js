@@ -4,8 +4,9 @@ const db = require("./config/db");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const path = require("path");
-const jwt = require("jsonwebtoken");
-const JWT_SECRET = process.env.JWT_SECRET;
+// const jwt = require("jsonwebtoken");
+// const JWT_SECRET = process.env.JWT_SECRET;
+const authenticateToken = require("./routes/auth");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -41,29 +42,24 @@ app.use(
 );
 
 // Authentication Middleware
-function authenticateToken(req, res, next) {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader?.split(" ")[1];
+// function authenticateToken(req, res, next) {
+//   const authHeader = req.headers["authorization"];
+//   const token = authHeader?.split(" ")[1];
 
-  if (!token) return res.sendStatus(401);
+//   if (!token) return res.sendStatus(401);
 
-  jwt.verify(token, JWT_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403);
-    req.user = user;
-    next();
-  });
-}
+//   jwt.verify(token, JWT_SECRET, (err, user) => {
+//     if (err) return res.sendStatus(403);
+//     req.user = user;
+//     next();
+//   });
+// }
 
 // Route Handlers
 // 1. Redirect root to login
 app.get("/", (req, res) => {
   res.redirect("/login.html");
 });
-
-// // 2. Public login route
-// app.get("/login", (req, res) => {
-//   res.sendFile(path.join(__dirname, "public", "login.html"));
-// });
 
 // 3. Protected routes
 app.get("/index.html", authenticateToken, (req, res) => {
@@ -88,6 +84,9 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send("Server error");
 });
-
-// Start Server
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+//EXPORTING APP FOR TESTING IF IT'S IN TEST MODE
+if (process.env.NODE_ENV === "test") {
+  module.exports = app; // Makes the app available for testing
+} else {
+  app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+}

@@ -11,18 +11,11 @@ const showLogin = document.getElementById("show-login");
 const loginForm = document.getElementById("login-form");
 const registerForm = document.getElementById("register-form");
 
-// Logo click - scroll to hero
-logo.addEventListener("click", (e) => {
-  e.preventDefault();
-  heroSection.scrollIntoView({ behavior: "smooth" });
-});
-
-// Nav Login click - show login form and scroll
+// Nav Login click - show login form
 navLogin.addEventListener("click", (e) => {
   e.preventDefault();
   registerContainer.classList.add("hidden");
   loginContainer.classList.remove("hidden");
-  authSection.scrollIntoView({ behavior: "smooth" });
 });
 
 // Nav Register click - show register form and scroll
@@ -30,7 +23,6 @@ navRegister.addEventListener("click", (e) => {
   e.preventDefault();
   loginContainer.classList.add("hidden");
   registerContainer.classList.remove("hidden");
-  authSection.scrollIntoView({ behavior: "smooth" });
 });
 
 // Form toggle buttons

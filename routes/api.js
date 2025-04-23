@@ -1,7 +1,9 @@
 require("dotenv").config();
 const path = require("path");
 const bcrypt = require("bcrypt");
+("");
 const saltRounds = 10;
+const authenticateToken = require("./auth");
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -77,10 +79,11 @@ module.exports = (app, db) => {
   });
 
   //ADD A NEW RECIPE
-  app.post("/api/recipe", async (req, res) => {
+  app.post("/api/recipe", authenticateToken, async (req, res) => {
+    console.log("Authenticated User:", req.user); // Debug log
+
     try {
-      const user = JSON.parse(req.session.user);
-      console.log("User:", user);
+      //const user = JSON.parse(req.session.user);
       const {
         name,
         instructions,
@@ -100,7 +103,7 @@ module.exports = (app, db) => {
       ) {
         return res.status(400).json({ error: "All fields required" });
       }
-
+      const uid = req.user.userId;
       const [recipe] = await db
         .promise()
         .query("SELECT * FROM recipes WHERE name = ?", [name.toLowerCase()]);
@@ -108,24 +111,25 @@ module.exports = (app, db) => {
       if (recipe.length > 0) {
         return res.status(400).json({ error: "recipe already exist" });
       }
-      const [registeredRecipe] = db
+      const registeredRecipe = await db
         .promise()
         .query(
-          "INSERT INTO recipes ( name, instructions,description,image,type,Cookingtime,ingredients) VALUES (?,?,?,?,?,?,?)",
+          "INSERT INTO recipes ( name, description,type,Cookingtime,ingredients,instructions,image,uid) VALUES (?,?,?,?,?,?,?,?)",
           [
             name.toLowerCase(),
-            instructions.toLowerCase(),
             description.toLowerCase(),
-            image.toLowerCase(),
             type.toLowerCase(),
-            Cookingtime.toLowerCase(),
+            Cookingtime,
             ingredients.toLowerCase(),
+            instructions.toLowerCase(),
+            image ? image.toLowerCase() : null,
+            uid,
           ]
         );
 
       res.status(201).json({
         success: true,
-        recipeId: registeredRecipe.rid,
+        recipeId: registeredRecipe[0].rid,
       });
     } catch (err) {
       console.error("Registration error:", err);

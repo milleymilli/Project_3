@@ -1,6 +1,35 @@
 const mobileMenu = document.getElementById("mobile-menu");
 const navLinks = document.querySelector(".nav-links");
 
+// SECTIONS TO BE SHOWN ON THE PAGE
+document.addEventListener("DOMContentLoaded", () => {
+  const sections = [
+    "user-section",
+    "add-user",
+    "recipe-section",
+    "add-recipe-container",
+  ];
+
+  // Hide all sections initially
+  sections.forEach((id) => {
+    document.querySelector("." + id).style.display = "none";
+  });
+
+  // Show one section
+  window.showSection = function (sectionClass) {
+    sections.forEach((id) => {
+      const el = document.querySelector("." + id);
+      if (el) el.style.display = "none";
+    });
+
+    const target = document.querySelector("." + sectionClass);
+    if (target) target.style.display = "block";
+  };
+
+  // Optionally show the first section by default
+  showSection("user-section");
+});
+
 mobileMenu.addEventListener("click", () => {
   navLinks.classList.toggle("show");
 });
@@ -17,17 +46,11 @@ document.getElementById("logout-link").addEventListener("click", async (e) => {
       },
     });
 
-    // 2. Nuclear client-side cleanup
     localStorage.clear();
     sessionStorage.clear();
 
-    // 3. Redirect with cache busting and history wipe
+    // WIPE THE HISTORY AND REDIRECT THE USER AFTER LOGGING OUT
     window.location.replace(`/login.html?nocache=${Date.now()}`);
-
-    // 4. Service worker cleanup (if applicable)
-    if ("caches" in window) {
-      caches.keys().then((keys) => keys.forEach((key) => caches.delete(key)));
-    }
   } catch (err) {
     console.error("Logout error:", err);
     // Fallback cleanup
@@ -40,7 +63,7 @@ document.getElementById("logout-link").addEventListener("click", async (e) => {
 //DISPLAYING ALL OUR USERS
 async function fetchUsers() {
   let response = await fetch("/api/users");
-  let users = await response.json(); //Why are we using JSON HERE when  we are already using it in the backend????
+  let users = await response.json();
   document.getElementById("user-list").innerHTML = users
     .map((user) => `<li>${user.name} (${user.email})</li>`)
     .join("");
@@ -55,7 +78,7 @@ async function addUser() {
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
 
-    // Validate inputs
+    // VALIDATING INPUTS
     if (!name || !email || !password) {
       alert("Name and email and also Password are required!");
       return;
@@ -69,12 +92,12 @@ async function addUser() {
       body: JSON.stringify({ name, email, password }),
     });
 
-    const result = await response.json(); // Always parse JSON
+    const result = await response.json();
 
     if (!response.ok) {
       throw new Error(result.error || "Failed to add user");
     }
-    form.reset(); // 🎉 Clear all fields on success
+    form.reset();
     alert(`${name} successfully Registered!`);
     console.log("Success:", result);
     fetchUsers(); // Refresh list
@@ -87,10 +110,10 @@ async function addUser() {
 //FETCHING ALL OUR RECIPES AND CREATTING RECIPE CARD FOR EACH AND ONE OF THEM
 async function fetchRecipes() {
   try {
-    let respo = await fetch("/api/recipes"); // Calls Recipes Express API
+    let respo = await fetch("/api/recipes");
     let recipes = await respo.json();
     const container = document.getElementById("recipes-container");
-    // container.innerHTML = "";
+    container.innerHTML = "";
     recipes.map((recipe) => container.appendChild(createRecipeCard(recipe)));
   } catch (err) {
     console.error("Failed to load recipes:", err);
@@ -101,11 +124,11 @@ async function fetchRecipes() {
 function createRecipeCard(recipe) {
   const card = document.createElement("div");
   card.className = "recipe-card";
-
   card.innerHTML = `
       <h3>${recipe.name}</h3>
       <p>${recipe.type} Dish</p>
       <button onclick="viewRecipe(${recipe.rid})">View Recipe</button>
+     
     `;
 
   return card;
@@ -141,7 +164,7 @@ document
         image: document.getElementById("recipe-image").value.trim() || null,
       };
 
-      // Validate required fields
+      // VALIDATING REQUIRED FIELDS
       if (
         !recipeData.name ||
         !recipeData.description ||
@@ -152,11 +175,12 @@ document
       ) {
         throw new Error("All required fields must be filled");
       }
-
+      const token = localStorage.getItem("token");
       const response = await fetch("/api/recipe", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(recipeData),
       });
@@ -169,7 +193,7 @@ document
 
       alert("Recipe added successfully!");
       form.reset();
-      fetchRecipes(); // Refresh the recipe list
+      fetchRecipes();
     } catch (error) {
       console.error("Error:", error);
       alert(`Error: ${error.message}`);
@@ -178,6 +202,7 @@ document
       submitBtn.textContent = "Add Recipe";
     }
   });
+
 //CREATING A MODAL DISPALYING THE RECIPE DETAILS
 async function viewRecipe(rid) {
   const modal = document.getElementById("recipeModal");
@@ -211,9 +236,9 @@ async function viewRecipe(rid) {
       .split(",")
       .map((item) => item.trim());
     const instructions = recipe[0].instructions
-      .split(/\d+\./) // Split by "1.", "2.", etc.
-      .map((step) => step.trim()) // Remove extra spaces
-      .filter((step) => step); // Remove empty items
+      .split(/\d+\./)
+      .map((step) => step.trim())
+      .filter((step) => step);
 
     const ingredientsList = document.getElementById("modalRecipeIngredients");
     const instructionsList = document.getElementById("modalRecipeInstructions");
@@ -229,8 +254,10 @@ async function viewRecipe(rid) {
     instructionsList.innerHTML = instructions
       .map((ins) => `<li>${ins}</li>`)
       .join("");
-
-    // DISSPLAYING THE MODAL
+    // Get the image container
+    /**
+     *
+     */
     modal.style.display = "block";
   } catch (error) {
     console.error("Full error:", {
@@ -250,8 +277,7 @@ document.getElementById("recipeSearch").addEventListener("input", function (e) {
 
   cards.forEach((card) => {
     const name = card.querySelector("h3").textContent.toLowerCase();
-    const type = card.querySelector("p").textContent.toLowerCase(); // Assuming type is in first <p>
-
+    const type = card.querySelector("p").textContent.toLowerCase();
     const matches = name.includes(searchTerm) || type.includes(searchTerm);
     card.style.display = matches ? "block" : "none";
     if (matches) anyVisible = true;
@@ -270,6 +296,6 @@ function clearSearch() {
   });
   document.getElementById("noRecipes").style.display = "none";
 }
-// I am Loading all the default pages
+// LOADING ALL THE DEFAULT PAGES
 fetchUsers();
 fetchRecipes();

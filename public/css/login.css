@@ -117,26 +117,26 @@ body {
 
 /* ===== HERO SECTION ===== */
 .hero {
-  display: flex;
+  display: flex !important;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   text-align: center;
   width: 100%;
   min-height: 100vh;
-  padding: 160px 20px 20px; /* Account for fixed nav */
+  padding: 2rem;
+  margin-top: 2rem;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  position: relative; /* Ensure proper stacking */
 }
 
-/* .hero-content {
+.hero-content {
   width: 100%;
   padding: 0 20px 0 20px;
-} */
+}
 
 .hero h1 {
   font-size: 2.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   color: #2a74be;
 }
 
@@ -175,8 +175,9 @@ body {
 }
 
 .recipe-grid {
+  /* display: flex; */
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(4, minmax(280px, 1fr));
   gap: 20px;
 }
 
@@ -288,7 +289,7 @@ body {
 
 /* ===== AUTH SECTION ===== */
 .auth-forms-wrapper {
-  display: flex;
+  display: flex !important;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
