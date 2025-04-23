@@ -199,8 +199,11 @@ async function initApp() {
 //FETCHING ALL OUR RECIPES AND CREATTING RECIPE CARD FOR EACH AND ONE OF THEM
 async function fetchRecipes() {
   try {
-    let respo = await fetch("/api/recipes"); // Calls Recipes Express API
-    let recipes = await respo.json();
+    let respo = await fetch("/api/recipes");
+    let recipeData = await respo.json();
+
+    const recipes = Array.isArray(recipeData) ? recipeData : [];
+    console.log(recipes);
     const container = document.getElementById("recipes-container");
     // container.innerHTML = "";
     recipes.map((recipe) => container.appendChild(createRecipeCard(recipe)));
