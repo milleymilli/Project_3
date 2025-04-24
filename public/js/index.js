@@ -110,12 +110,12 @@ async function addUser() {
 //FETCHING ALL OUR RECIPES AND CREATTING RECIPE CARD FOR EACH AND ONE OF THEM
 async function fetchRecipes() {
   try {
-    // const baseUrl =
-    //   window.location.hostname === "localhost"
-    //     ? "http://localhost:3000"
-    //     : "https://your-railway-backend-url.up.railway.app";
+    const baseUrl =
+      window.location.hostname === "localhost"
+        ? "http://localhost:3000"
+        : "https://vkitchen-api.up.railway.app";
 
-    const respo = await fetch(`/api/recipes`);
+    const respo = await fetch(`${baseUrl}/api/recipes`);
     const recipes = await respo.json();
     const container = document.getElementById("recipes-container");
     container.innerHTML = "";
