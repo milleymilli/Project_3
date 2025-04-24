@@ -7,7 +7,6 @@ const path = require("path");
 const authenticateToken = require("./routes/auth");
 const app = express();
 const PORT = process.env.PORT || 5000;
-require("./routes/api")(app, db);
 
 // Middleware Configuration
 app.use(
