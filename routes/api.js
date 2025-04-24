@@ -16,13 +16,14 @@ module.exports = (app, db) => {
       },
     });
   });
-  // Home route
-  app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "login.html"));
-  });
+  // // Home route
+  // app.get("/", (req, res) => {
+  //   res.sendFile(path.join(__dirname, "public", "login.html"));
+  // });
 
   // GET ALL USERS
   app.get("/api/users", (req, res) => {
+    console.log("GET /api/users hit");
     db.query("SELECT * FROM users", (err, results) => {
       if (err) return res.status(500).json({ error: err.message });
       res.json(results);
@@ -30,7 +31,7 @@ module.exports = (app, db) => {
   });
 
   // REGISTER A USER
-  app.post("/api/register", async (req, res) => {
+  app.post("/api/register", authenticateToken, async (req, res) => {
     try {
       const { name, email, password } = req.body;
 

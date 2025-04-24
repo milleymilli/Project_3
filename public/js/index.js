@@ -62,11 +62,20 @@ document.getElementById("logout-link").addEventListener("click", async (e) => {
 
 //DISPLAYING ALL OUR USERS
 async function fetchUsers() {
-  let response = await fetch("/api/users");
-  let users = await response.json();
-  document.getElementById("user-list").innerHTML = users
-    .map((user) => `<li>${user.name} (${user.email})</li>`)
-    .join("");
+  try {
+    const baseUrl =
+      window.location.hostname === "localhost"
+        ? "http://localhost:3000"
+        : "https://your-railway-backend-url.up.railway.app";
+
+    let response = await fetch(`${baseUrl}/api/users`);
+    let users = await response.json();
+    document.getElementById("user-list").innerHTML = users
+      .map((user) => `<li>${user.name} (${user.email})</li>`)
+      .join("");
+  } catch (err) {
+    console.error("Failed to load users:", err);
+  }
 }
 
 //ADDING NEW USERS
@@ -110,8 +119,13 @@ async function addUser() {
 //FETCHING ALL OUR RECIPES AND CREATTING RECIPE CARD FOR EACH AND ONE OF THEM
 async function fetchRecipes() {
   try {
-    let respo = await fetch("/api/recipes");
-    let recipes = await respo.json();
+    const baseUrl =
+      window.location.hostname === "localhost"
+        ? "http://localhost:3000"
+        : "https://your-railway-backend-url.up.railway.app";
+
+    const respo = await fetch(`${baseUrl}/api/recipes`);
+    const recipes = await respo.json();
     const container = document.getElementById("recipes-container");
     container.innerHTML = "";
     recipes.map((recipe) => container.appendChild(createRecipeCard(recipe)));
@@ -213,7 +227,11 @@ async function viewRecipe(rid) {
   };
   //console.log("Clicked - Recipe ID:", rid);
   try {
-    let response = await fetch(`/api/recipes/${rid}`);
+    const baseUrl =
+      window.location.hostname === "localhost"
+        ? "http://localhost:3000"
+        : "https://your-railway-backend-url.up.railway.app";
+    let response = await fetch(`${baseUrl}/api/recipes/${rid}`);
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(
