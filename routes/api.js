@@ -180,9 +180,6 @@ module.exports = (app, db) => {
     try {
       const { email, password } = req.body;
 
-      // Debug logging
-      console.log("Login attempt for:", email);
-
       // 1. Validate user credentials
       const [users] = await db
         .promise()

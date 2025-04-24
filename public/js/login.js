@@ -199,7 +199,12 @@ async function initApp() {
 //FETCHING ALL OUR RECIPES AND CREATTING RECIPE CARD FOR EACH AND ONE OF THEM
 async function fetchRecipes() {
   try {
-    let respo = await fetch("/api/recipes");
+    const baseUrl =
+      window.location.hostname === "localhost"
+        ? "http://localhost:3000"
+        : "https://your-railway-backend-url.up.railway.app";
+
+    let respo = await fetch(`${baseUrl}/api/recipes`);
     let recipeData = await respo.json();
 
     const recipes = Array.isArray(recipeData) ? recipeData : [];
