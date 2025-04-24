@@ -201,7 +201,7 @@ async function fetchRecipes() {
   try {
     const baseUrl =
       window.location.hostname === "localhost"
-        ? "http://localhost:3000"
+        ? "http://localhost:5000"
         : "https://vkitchen-api.up.railway.app";
 
     let respo = await fetch(`${baseUrl}/api/recipes`);

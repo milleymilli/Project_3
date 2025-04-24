@@ -6,7 +6,7 @@
   font-family: "Poppins", sans-serif;
 }
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: smooth !important;
 }
 
 body {

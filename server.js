@@ -6,13 +6,13 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const authenticateToken = require("./routes/auth");
 const app = express();
-const PORT = process.env.PORT || 5000;
-const corsOptions = {
-  origin: ["https://project-3.onrender.com", "http://localhost:3000"],
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true,
-};
-app.use(cors(corsOptions));
+const PORT = process.env.DB_PORT || 3000;
+// const corsOptions = {
+//   origin: "http://localhost:5000", // Use your actual frontend URLs
+//   methods: ["GET", "POST", "PUT", "DELETE"],
+//   credentials: true, // This allows credentials to be sent with requests
+// };
+//app.use(cors(corsOptions));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());

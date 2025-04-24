@@ -62,18 +62,30 @@ document.getElementById("logout-link").addEventListener("click", async (e) => {
 
 //DISPLAYING ALL OUR USERS
 async function fetchUsers() {
-  let response = await fetch("/api/users");
-  let users = await response.json();
-  document.getElementById("user-list").innerHTML = users
-    .map((user) => `<li>${user.name} (${user.email})</li>`)
-    .join("");
+  try {
+    const baseUrl =
+      window.location.hostname === "localhost"
+        ? "http://localhost:5000"
+        : "https://vkitchen-api.up.railway.app";
+    let response = await fetch(`${baseUrl}/api/users`);
+    let users = await response.json();
+    document.getElementById("user-list").innerHTML = users
+      .map((user) => `<li>${user.name} (${user.email})</li>`)
+      .join("");
+  } catch (err) {
+    throw new Error(err);
+  }
 }
-
 //ADDING NEW USERS
 async function addUser() {
   //console.log("Submit button has been clicked");
   const form = document.getElementById("user-form");
   try {
+    const baseUrl =
+      window.location.hostname === "localhost"
+        ? "http://localhost:5000"
+        : "https://vkitchen-api.up.railway.app";
+
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
@@ -86,7 +98,7 @@ async function addUser() {
 
     console.log("Submitting:", { name, email, password });
 
-    const response = await fetch("/api/users", {
+    const response = await fetch(`${baseUrl}/api/users`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, email, password }),
@@ -109,13 +121,18 @@ async function addUser() {
 
 //FETCHING ALL OUR RECIPES AND CREATTING RECIPE CARD FOR EACH AND ONE OF THEM
 async function fetchRecipes() {
+  console.log("called - up");
   try {
     const baseUrl =
       window.location.hostname === "localhost"
-        ? "http://localhost:3000"
+        ? "http://localhost:5000"
         : "https://vkitchen-api.up.railway.app";
 
     const respo = await fetch(`${baseUrl}/api/recipes`);
+    if (!respo.ok) {
+      throw new Error(`Failed to fetch: ${respo.statusText}`);
+    }
+
     const recipes = await respo.json();
     const container = document.getElementById("recipes-container");
     container.innerHTML = "";
@@ -220,7 +237,7 @@ async function viewRecipe(rid) {
   try {
     const baseUrl =
       window.location.hostname === "localhost"
-        ? "http://localhost:3000"
+        ? "http://localhost:5000"
         : "https://your-railway-backend-url.up.railway.app";
     let response = await fetch(`${baseUrl}/api/recipes/${rid}`);
     if (!response.ok) {
