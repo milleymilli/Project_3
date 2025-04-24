@@ -8,11 +8,10 @@ const authenticateToken = require("./routes/auth");
 const app = express();
 const PORT = process.env.PORT || 5000;
 const corsOptions = {
-  origin: "https://your-railway-backend-url.up.railway.app",
+  origin: "*", // Allow all origins (for development only)
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
 };
-
 app.use(cors(corsOptions));
 // Middleware Configuration
 // app.use(

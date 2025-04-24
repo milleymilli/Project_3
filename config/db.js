@@ -12,7 +12,13 @@ const dbConfig = {
   keepAliveInitialDelay: 10000, // Start keep-alive after 10 seconds
   ssl: process.env.DB_SSL ? { rejectUnauthorized: false } : null,
 };
-
+// Temporarily add this before your dbConfig to verify your environment variables
+console.log("Current DB Config:", {
+  host: process.env.MYSQLHOST || process.env.DB_HOST,
+  user: process.env.MYSQLUSER || process.env.DB_USER,
+  database: process.env.MYSQLDATABASE || process.env.DB_NAME,
+  port: process.env.MYSQLPORT || process.env.DB_PORT || 3306,
+});
 let db;
 
 // Connection management with retry logic
