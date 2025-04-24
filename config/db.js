@@ -3,13 +3,11 @@ const mysql = require("mysql2");
 
 // MySQL Connection
 const db = mysql.createConnection({
-  host: process.env.DB_HOST || "localhost",
-  user: process.env.DB_USER || "root",
-  password: process.env.DB_PASS || undefined,
-  database: process.env.DB_NAME || "vkitchen",
-  authPlugins: {
-    mysql_clear_password: () => () => Buffer.from(process.env.DB_PASS + "\0"),
-  },
+  host: process.env.MYSQLHOST || process.env.DB_HOST,
+  user: process.env.MYSQLUSER || process.env.DB_USER,
+  password: process.env.MYSQLPASSWORD || process.env.DB_PASS,
+  database: process.env.MYSQLDATABASE || process.env.DB_NAME,
+  port: process.env.MYSQLPORT || process.env.DB_PORT || 3306,
 });
 
 db.connect((err) => {
